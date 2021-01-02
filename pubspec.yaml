@@ -1,0 +1,58 @@
+name: greenz_go_app_v2
+description: A new Flutter application.
+
+# The following line prevents the package from being accidentally published to
+# pub.dev using `pub publish`. This is preferred for private packages.
+publish_to: 'none' # Remove this line if you wish to publish to pub.dev
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=2.7.0 <3.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.0
+  platform_date_picker: ^0.0.4+1
+  flutter_datetime_picker: ^1.4.0
+  f_datetimerangepicker: ^0.1.4
+  smart_select: ^4.3.2
+  intl: ^0.16.1
+  cloud_firestore: ^0.14.3+1
+  firebase_core: ^0.5.2+1
+  firebase_auth: ^0.18.3+1
+  google_fonts: ^1.1.1
+  font_awesome_flutter: ^8.10.0
+  package_info: ^0.4.3+2
+  provider: ^4.3.2+2
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+
+# The following section is specific to Flutter.
+flutter:
+
+  # The following line ensures that the Material Icons font is
+  # included with your application, so that you can use the icons in
+  # the material Icons class.
+  uses-material-design: true
+
+  assets:
+    - images/
+
+  fonts:
+    - family: Comfortaa
+      fonts:
+        - asset: fonts/Comfortaa_script.ttf
+
+    - family: Playfair Display
+      fonts:
+        - asset: fonts/PlayfairDisplay_script.ttf
+        - asset: fonts/PlayfairDisplay_Italic.ttf
+          style: italic
+  #
+  # For details regarding fonts from package dependencies,
+  # see https://flutter.dev/custom-fonts/#from-packages

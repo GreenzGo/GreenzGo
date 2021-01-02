@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "968752527871",
+    "firebase_url": "https://greenz-go.firebaseio.com",
+    "project_id": "greenz-go",
+    "storage_bucket": "greenz-go.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:968752527871:android:60dd2c649b21c2feeb8fca",
+        "android_client_info": {
+          "package_name": "com.sunset.greenz_go_app_v2"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "968752527871-e7pr3ukiqv9ubidd69ifb3luqjc2oq68.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDn4ZDxtS4FAEI7fqQWRwpcjRSU71PQ-rc"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "968752527871-e7pr3ukiqv9ubidd69ifb3luqjc2oq68.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
