@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:greenz_go_app_v2/notifier/auth_notifier.dart';
-import 'package:greenz_go_app_v2/ui/screens/catalog_screen.dart';
+import 'package:greenz_go_app_v2/notifier/vehicle_notifier.dart';
 import 'package:greenz_go_app_v2/constants.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:greenz_go_app_v2/utils/widgets/vehicleListItem.dart';
+import 'package:greenz_go_app_v2/ui/screens/vehicle_form.dart';
+import 'package:greenz_go_app_v2/api/greenz_go_api.dart';
 import 'package:provider/provider.dart';
 
 class ProfileScreen extends StatefulWidget {
@@ -14,12 +14,17 @@ class ProfileScreen extends StatefulWidget {
 
 class _ProfileScreenState extends State<ProfileScreen>
     with AutomaticKeepAliveClientMixin {
-  final _auth = FirebaseAuth.instance;
+  void _logout() {
+    AuthNotifier authNotifier =
+        Provider.of<AuthNotifier>(context, listen: false);
+    logout(authNotifier);
+  }
 
   @override
   Widget build(BuildContext context) {
     AuthNotifier authNotifier =
         Provider.of<AuthNotifier>(context, listen: false);
+    VehicleNotifier vehicleNotifier = Provider.of<VehicleNotifier>(context);
 
     super.build(context);
     return SafeArea(
@@ -374,32 +379,34 @@ class _ProfileScreenState extends State<ProfileScreen>
                         vertical: 5,
                       ),
                       child: Container(
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Icon(
-                              Icons.exit_to_app,
-                              color: Color(0xff57ba98),
-                            ),
-                            SizedBox(
-                              width: 5,
-                            ),
-                            Text(
-                              "Logout",
-                              style: TextStyle(
-                                fontFamily: "Segoe UI",
-                                fontWeight: FontWeight.w700,
-                                fontSize: 16,
-                                color: Color(0xff57ba98),
+                        child: ElevatedButton(
+                          onPressed: () {
+                            _logout();
+                          },
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Icon(
+                                Icons.exit_to_app,
                               ),
-                            )
-                          ],
+                              SizedBox(
+                                width: 5,
+                              ),
+                              Text(
+                                "Logout",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.w700,
+                                  fontSize: 16,
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                         height: 55.00,
                         width: 160.00,
                         decoration: BoxDecoration(
                           color: Color(0xff3f3f3f),
-                          borderRadius: BorderRadius.circular(28.00),
+                          borderRadius: BorderRadius.circular(30),
                         ),
                       ),
                     ),
@@ -459,10 +466,20 @@ class _ProfileScreenState extends State<ProfileScreen>
                     left: 5,
                     bottom: 10,
                   ),
-                  child: Icon(
-                    Icons.add_circle,
-                    color: Color(0xff57ba98),
-                    size: 30,
+                  child: IconButton(
+                    onPressed: () {
+                      vehicleNotifier.currentVehicle = null;
+                      Navigator.of(context).push(
+                          MaterialPageRoute(builder: (BuildContext context) {
+                        return VehicleForm();
+                      }));
+                    },
+                    tooltip: 'Add a new Vehicle',
+                    icon: Icon(
+                      Icons.add_circle,
+                      color: Color(0xff57ba98),
+                      size: 30,
+                    ),
                   ),
                 ),
               ],

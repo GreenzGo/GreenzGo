@@ -12,7 +12,7 @@ import 'ui/screens/renter_profile.dart';
 import 'ui/screens/request_screen.dart';
 import 'ui/screens/search_screen.dart';
 import 'ui/screens/vehicle_detail.dart';
-import 'utils/theme/theme.dart';
+// import 'utils/theme/theme.dart';
 import 'ui/screens/homescreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'notifier/auth_notifier.dart';
@@ -44,7 +44,7 @@ class MyApp extends StatelessWidget {
     return Provider.value(
       value: appTheme,
       child: MaterialApp(
-        theme: darkTheme(),
+        theme: appTheme.themeData,
         initialRoute: HomeScreen.id,
         routes: {
           HomeScreen.id: (context) => HomeScreen(),

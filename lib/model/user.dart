@@ -4,6 +4,10 @@ class UserAccnt {
   String password;
   String accountType;
   int age;
+  String phoneNumber;
+  String address;
+  String parish;
+  String userID;
 
   UserAccnt();
 }

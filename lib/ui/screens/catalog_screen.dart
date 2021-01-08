@@ -1,10 +1,10 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:greenz_go_app_v2/api/greenz_go_api.dart';
 import 'package:greenz_go_app_v2/constants.dart';
 import 'package:greenz_go_app_v2/notifier/auth_notifier.dart';
 import 'package:greenz_go_app_v2/notifier/vehicle_notifier.dart';
 import 'package:greenz_go_app_v2/ui/screens/vehicle_detail.dart';
-import 'package:greenz_go_app_v2/utils/widgets/reusableCard.dart';
 import 'package:greenz_go_app_v2/utils/widgets/vehicleListItem.dart';
 import 'package:provider/provider.dart';
 
@@ -23,7 +23,13 @@ class _CatalogScreenState extends State<CatalogScreen>
   void initState() {
     VehicleNotifier vehicleNotifier =
         Provider.of<VehicleNotifier>(context, listen: false);
-    getVehicles(vehicleNotifier);
+    vehicleNotifier.vehicleList != null
+        ? getVehicles(vehicleNotifier)
+        : Center(
+            child: CircularProgressIndicator(
+              semanticsLabel: 'Loading Vehicles',
+            ),
+          );
     super.initState();
   }
 
@@ -43,6 +49,7 @@ class _CatalogScreenState extends State<CatalogScreen>
         ),
         child: Scaffold(
           appBar: AppBar(
+            backgroundColor: Colors.transparent,
             title: Text(
               "Catalog",
               textAlign: TextAlign.center,
@@ -83,75 +90,52 @@ class _CatalogScreenState extends State<CatalogScreen>
             elevation: 0,
           ),
           backgroundColor: Colors.transparent,
-          body: Padding(
-            padding: const EdgeInsets.only(
-              left: 10,
-              top: 15,
-              right: 10,
-            ),
+          body: Container(
+            width: MediaQuery.of(context).size.width,
+            margin: EdgeInsets.fromLTRB(5, 0, 5, 10),
             child: ListView.separated(
               itemCount: vehicleNotifier.vehicleList.length,
               padding: EdgeInsets.all(10),
               itemBuilder: (BuildContext context, int index) {
+                print('building listview');
                 return Column(
                   children: [
-                    Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              top: 15, left: 10, bottom: 15),
-                          child: Text(
-                            "${vehicleNotifier.vehicleList.length}",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 16,
-                              color: kTextColor,
+                    VehicleListItem(
+                      onTap: () {
+                        vehicleNotifier.currentVehicle =
+                            vehicleNotifier.vehicleList[index];
+                        Navigator.of(context).push(
+                            MaterialPageRoute(builder: (BuildContext context) {
+                          return VehicleDetail();
+                        }));
+                      },
+                      thumbnail: SizedBox.expand(
+                        child: ClipRRect(
+                          borderRadius: BorderRadius.circular(30),
+                          child: CachedNetworkImage(
+                            imageUrl: vehicleNotifier.vehicleList[index].image,
+                            imageBuilder: (context, imageProvider) => ClipRRect(
+                              borderRadius: BorderRadius.circular(30),
+                              child: Image(
+                                image: imageProvider,
+                                fit: BoxFit.fill,
+                              ),
                             ),
+                            placeholder: (context, url) =>
+                                CircularProgressIndicator(),
+                            errorWidget: (context, url, error) =>
+                                Icon(Icons.error),
                           ),
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(
-                              top: 15, bottom: 15, left: 10),
-                          child: Text(
-                            "Results found",
-                            style: TextStyle(
-                              fontWeight: FontWeight.w700,
-                              fontSize: 16,
-                              color: Color(0xffb5cfd2),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(0, 10, 0, 0),
-                      child: VehicleListItem(
-                        onTap: () {
-                          vehicleNotifier.currentVehicle =
-                              vehicleNotifier.vehicleList[index];
-                          Navigator.of(context).push(MaterialPageRoute(
-                              builder: (BuildContext context) {
-                            return VehicleDetail();
-                          }));
-                        },
-                        thumbnail: SizedBox.expand(
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(30),
-                            child: Image.asset(
-                              'images/car.jpg',
-                              fit: BoxFit.fill,
-                            ),
-                          ),
-                        ),
-                        title:
-                            '${vehicleNotifier.vehicleList[index].vehicleMake} ${vehicleNotifier.vehicleList[index].vehicleModel}',
-                        location:
-                            vehicleNotifier.vehicleList[index].rentalAddress,
-                        rating: vehicleNotifier.vehicleList[index].rating
-                            .toString(),
-                        price: vehicleNotifier.vehicleList[index].vehicleRate
-                            .toString(),
                       ),
+                      title:
+                          '${vehicleNotifier.vehicleList[index].vehicleMake} ${vehicleNotifier.vehicleList[index].vehicleModel}',
+                      location:
+                          vehicleNotifier.vehicleList[index].rentalAddress,
+                      rating:
+                          vehicleNotifier.vehicleList[index].rating.toString(),
+                      price: vehicleNotifier.vehicleList[index].vehicleRate
+                          .toString(),
                     ),
                   ],
                 );
@@ -175,73 +159,3 @@ class _CatalogScreenState extends State<CatalogScreen>
   @override
   bool get wantKeepAlive => true;
 }
-// ReusableCard(
-// onPress: () {},
-// colour: Color(0xff2a2a2a),
-// cardHeight: 130,
-// cardWidth: 360,
-// borderRadius: BorderRadius.only(
-// topLeft: Radius.circular(30),
-// bottomLeft: Radius.circular(30),
-// bottomRight: Radius.circular(30),
-// ),
-// cardChild: ListTile(
-// contentPadding: EdgeInsets.symmetric(
-// vertical: 15, horizontal: 10),
-// leading: ClipRRect(
-// borderRadius: BorderRadius.circular(30),
-// child: Image.asset(
-// 'images/car.jpg',
-// fit: BoxFit.cover,
-// width: 100,
-// height: 250,
-// ),
-// ),
-// trailing: IconButton(
-// onPressed: () {},
-// iconSize: 32,
-// icon: Icon(Icons.more_vert_rounded),
-// color: Color(0xff57BA98),
-// ),
-// title: Padding(
-// padding: const EdgeInsets.only(
-// top: 8,
-// bottom: 8,
-// ),
-// child: Text(
-// '${vehicleNotifier.vehicleList[index].vehicleMake} ${vehicleNotifier.vehicleList[index].vehicleModel}',
-// style:
-// TextStyle(color: Colors.white, fontSize: 16),
-// textAlign: TextAlign.center,
-// ),
-// ),
-// subtitle: Column(
-// children: [
-// Padding(
-// padding: const EdgeInsets.only(
-// bottom: 8,
-// ),
-// child: Text(
-// vehicleNotifier
-//     .vehicleList[index].rentalAddress,
-// style: TextStyle(
-// color: Colors.grey,
-// fontSize: 12,
-// ),
-// ),
-// ),
-// Padding(
-// padding: const EdgeInsets.only(
-// bottom: 8,
-// ),
-// child: Text(
-// '\$ ${vehicleNotifier.vehicleList[index].vehicleRate} /day',
-// style: TextStyle(
-// fontSize: 12,
-// ),
-// ),
-// ),
-// ],
-// ),
-// ),
-// )

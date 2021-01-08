@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
 class ThemeProto {
-  bool isDark;
-
   ThemeProto({@required isDark});
+  bool isDark = true;
 
   ThemeData get themeData {
     TextTheme textTheme =
@@ -18,16 +18,32 @@ class ThemeProto {
         surface: Color(0xff2a2a2a),
         background: Color(0xff121212),
         error: Colors.red.shade500,
-        onPrimary: Color(0xff57ba98),
+        onPrimary: Colors.white,
         onSecondary: Color(0xff0c0c0c),
         onSurface: Color(0xff57ba98),
         onBackground: Color(0xff57ba98),
         onError: Colors.white,
         brightness: isDark ? Brightness.dark : Brightness.light);
 
-    var t =
-        ThemeData.from(colorScheme: colorScheme, textTheme: textTheme).copyWith(
-      buttonColor: Color(0xff57BA98),
+    var t = ThemeData.from(
+      colorScheme: colorScheme,
+      textTheme: GoogleFonts.comfortaaTextTheme(textTheme).copyWith(
+        bodyText1: GoogleFonts.openSans(textStyle: textTheme.bodyText1)
+            .copyWith(color: Color(0xff57BA98)),
+        bodyText2: GoogleFonts.openSans(textStyle: textTheme.bodyText1)
+            .copyWith(color: Colors.white),
+        button: GoogleFonts.comfortaa(textStyle: textTheme.button)
+            .copyWith(color: Colors.white),
+      ),
+    ).copyWith(
+      buttonTheme: ButtonThemeData(
+        textTheme: ButtonTextTheme.accent,
+        buttonColor: Color(0xff57BA98),
+      ),
+      textSelectionTheme: TextSelectionThemeData(
+        selectionColor: Color(0xff57BA98),
+        cursorColor: Color(0xff57BA98),
+      ),
       cursorColor: Color(0xff57BA98),
       highlightColor: Color(0xff57BA98),
       toggleableActiveColor: Color(0xff57BA98),
@@ -38,7 +54,7 @@ class ThemeProto {
       elevatedButtonTheme: ElevatedButtonThemeData(
         style: ElevatedButton.styleFrom(
           primary: Color(0xff57BA98),
-          onSurface: Colors.white,
+          textStyle: TextStyle(color: Colors.white),
           minimumSize: Size(160, 50),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(30),

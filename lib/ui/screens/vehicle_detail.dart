@@ -1,12 +1,14 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:greenz_go_app_v2/notifier/vehicle_notifier.dart';
+import 'package:greenz_go_app_v2/ui/screens/vehicle_form.dart';
 import 'package:provider/provider.dart';
 import 'package:greenz_go_app_v2/constants.dart';
 
 class VehicleDetail extends StatelessWidget {
   static const String id = 'vehicleProfile_screen';
 
-  Widget vehicleDisplay(String rating, driveType, seats, location) {
+  Widget vehicleDisplay(String rating, driveType, seats, location, image) {
     return Container(
       padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
       margin: EdgeInsets.fromLTRB(0, 20, 0, 10),
@@ -25,15 +27,20 @@ class VehicleDetail extends StatelessWidget {
             ),
             height: 290,
             child: SizedBox.expand(
-              child: ClipRRect(
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(45),
-                  topRight: Radius.circular(45),
+              child: CachedNetworkImage(
+                imageUrl: '$image',
+                imageBuilder: (context, imageProvider) => ClipRRect(
+                  borderRadius: BorderRadius.only(
+                    topLeft: Radius.circular(45),
+                    topRight: Radius.circular(45),
+                  ),
+                  child: Image(
+                    image: imageProvider,
+                    fit: BoxFit.fill,
+                  ),
                 ),
-                child: Image.asset(
-                  'images/car.jpg',
-                  fit: BoxFit.fill,
-                ),
+                placeholder: (context, url) => CircularProgressIndicator(),
+                errorWidget: (context, url, error) => Icon(Icons.error),
               ),
             ),
           ),
@@ -347,7 +354,7 @@ class VehicleDetail extends StatelessWidget {
           ),
           Expanded(
             child: Text(
-              '\$ ${price} /day',
+              '\$ $price /day',
               style: TextStyle(fontSize: 16),
             ),
           ),
@@ -380,12 +387,13 @@ class VehicleDetail extends StatelessWidget {
         child: Scaffold(
           backgroundColor: Colors.transparent,
           appBar: AppBar(
+            backgroundColor: Colors.transparent,
             centerTitle: true,
             title: Text(
               '${vehicleNotifier.currentVehicle.vehicleMake} ${vehicleNotifier.currentVehicle.vehicleModel}',
               style: TextStyle(
                 fontWeight: FontWeight.w700,
-                fontSize: 32,
+                fontSize: 22,
                 color: kTextColor,
               ),
             ),
@@ -393,6 +401,15 @@ class VehicleDetail extends StatelessWidget {
               IconButton(
                 icon: Icon(Icons.favorite_border_rounded),
                 onPressed: () {},
+              ),
+              IconButton(
+                icon: Icon(Icons.edit),
+                onPressed: () {
+                  Navigator.of(context)
+                      .push(MaterialPageRoute(builder: (BuildContext context) {
+                    return VehicleForm();
+                  }));
+                },
               ),
             ],
           ),
@@ -402,10 +419,12 @@ class VehicleDetail extends StatelessWidget {
               child: Column(
                 children: [
                   vehicleDisplay(
-                      '${vehicleNotifier.currentVehicle.rating}',
-                      '${vehicleNotifier.currentVehicle.driveType}',
-                      '${vehicleNotifier.currentVehicle.vehicleSeats}',
-                      '${vehicleNotifier.currentVehicle.rentalAddress}'),
+                    '${vehicleNotifier.currentVehicle.rating}',
+                    '${vehicleNotifier.currentVehicle.driveType}',
+                    '${vehicleNotifier.currentVehicle.vehicleSeats}',
+                    '${vehicleNotifier.currentVehicle.rentalAddress}',
+                    '${vehicleNotifier.currentVehicle.image}',
+                  ),
                   vehicleDetail(
                     '${vehicleNotifier.currentVehicle.vehicleOwner}',
                     '${vehicleNotifier.currentVehicle.vehicleType}',

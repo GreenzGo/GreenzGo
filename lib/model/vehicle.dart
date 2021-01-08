@@ -14,8 +14,11 @@ class Vehicle {
   int vehicleSeats;
   String vehicleOwner;
   bool vehicleStatus;
+  String image;
 
   Timestamp createdAt;
+
+  Vehicle();
 
   Vehicle.fromMap(Map<String, dynamic> data) {
     vehicleId = data['vehicleID'];
@@ -31,5 +34,6 @@ class Vehicle {
     vehicleSeats = data['vehicleSeats'];
     vehicleOwner = data['vehicleOwner'];
     vehicleStatus = data['vehicleStatus'];
+    image = data['image'];
   }
 }

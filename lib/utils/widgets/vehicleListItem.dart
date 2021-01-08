@@ -73,7 +73,7 @@ class _VehicleDescription extends StatelessWidget {
                   bottom: 8,
                 )),
                 Text(
-                  '\$ ${price} /day',
+                  '\$ $price /day',
                   style: const TextStyle(
                     fontSize: 10.0,
                   ),
@@ -160,76 +160,3 @@ class VehicleListItem extends StatelessWidget {
     );
   }
 }
-
-// ListTile(
-// leading: Padding(
-// padding: const EdgeInsets.all(10.0),
-// child: ClipRRect(
-// child: thumbnail,
-// borderRadius: BorderRadius.circular(30),
-// ),
-// ),
-// trailing: IconButton(
-// onPressed: () {},
-// iconSize: 32,
-// icon: Icon(Icons.more_vert_rounded),
-// color: Color(0xff57BA98),
-// ),
-// title: Row(
-// children: [
-// Expanded(
-// child: Column(
-// children: [
-// Padding(
-// padding: const EdgeInsets.only(
-// top: 8.0,
-// left: 8.0,
-// ),
-// child: Align(
-// alignment: Alignment.topLeft,
-// child: Text(
-// '$vehicleMake $vehicleModel',
-// style: TextStyle(color: Colors.white, fontSize: 16),
-// ),
-// ),
-// ),
-// Padding(
-// padding: const EdgeInsets.only(
-// top: 8.0,
-// left: 8.0,
-// ),
-// child: Align(
-// alignment: Alignment.centerLeft,
-// child: Text(
-// rentLocation,
-// style: TextStyle(
-// color: Colors.grey,
-// fontSize: 12,
-// ),
-// ),
-// ),
-// ),
-// Padding(
-// padding: const EdgeInsets.only(
-// top: 8.0,
-// left: 8.0,
-// ),
-// child: Align(
-// alignment: Alignment.bottomLeft,
-// child: Text(
-// '\$ $vehicleRate /day',
-// style: TextStyle(
-// fontSize: 12,
-// ),
-// ),
-// ),
-// ),
-// ],
-// ),
-// ),
-// SizedBox(
-// width: 10,
-// ),
-// ],
-// ),
-// )
