@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smart_select/smart_select.dart';
 
-//TODO: #4 Update constants with Text styles, icon size and colors, container colors etc.
+//TODO: #0.5 Update constants with Text styles, icon size and colors, container colors etc.
 
 const kButtonTextColor = Color(0xff57ba98);
 const kTextColor = Color(0xff57ba98);
@@ -50,87 +50,6 @@ List<String> kparishDropDownItems = [
   'Saint John',
   'Saint Mark',
   'Carriacou',
-];
-
-List<DropdownMenuItem<String>> vehicleDropDownItems = [
-  DropdownMenuItem(
-    child: Text('Car'),
-    value: 'car',
-  ),
-  DropdownMenuItem(
-    child: Text('Van'),
-    value: 'van',
-  ),
-  DropdownMenuItem(
-    child: Text('Truck'),
-    value: 'truck',
-  ),
-  DropdownMenuItem(
-    child: Text('Other'),
-    value: 'other',
-  ),
-  DropdownMenuItem(
-    child: Text('Any'),
-    value: 'Any',
-  ),
-];
-
-List<DropdownMenuItem<String>> driveTypeDropDownItems = [
-  DropdownMenuItem(
-    child: Text('Manual'),
-    value: 'Manual',
-  ),
-  DropdownMenuItem(
-    child: Text('Automatic'),
-    value: 'Automatic',
-  ),
-];
-
-List<DropdownMenuItem<String>> parishDropDownItems = [
-  DropdownMenuItem(
-    child: Text('Saint George'),
-    value: 'Saint George',
-  ),
-  DropdownMenuItem(
-    child: Text('Saint Andrew'),
-    value: 'Saint Andrew',
-  ),
-  DropdownMenuItem(
-    child: Text('Saint David'),
-    value: 'Saint David',
-  ),
-  DropdownMenuItem(
-    child: Text('Saint Patrick'),
-    value: 'Saint Patrick',
-  ),
-  DropdownMenuItem(
-    child: Text('Saint John'),
-    value: 'Saint John',
-  ),
-  DropdownMenuItem(
-    child: Text('Saint  Mark'),
-    value: 'Saint  Mark',
-  ),
-  DropdownMenuItem(
-    child: Text('Carriacou'),
-    value: 'Carriacou',
-  ),
-  DropdownMenuItem(
-    child: Text('Any'),
-    value: 'any',
-  ),
-];
-
-const kVehicleDropDownList = <String>['', 'Car', 'Van', 'Truck', 'Any'];
-
-const kLocationDropDownList = <String>[
-  '',
-  'St.George',
-  'St.Andrews',
-  'St.Patrick',
-  'St.David',
-  'St.John',
-  'St.Marks'
 ];
 
 class RegFormVal {

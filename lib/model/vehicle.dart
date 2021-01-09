@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+//creates Vehicle class
 class Vehicle {
   String vehicleId;
   String vehicleMake;
@@ -21,6 +22,7 @@ class Vehicle {
 
   Vehicle();
 
+//formats data from database into local variables
   Vehicle.fromMap(Map<String, dynamic> data) {
     vehicleId = data['vehicleID'];
     vehicleMake = data['vehicleMake'];
@@ -40,6 +42,7 @@ class Vehicle {
     updatedAt = data['updatedAt'];
   }
 
+//assigns data from local variables into a map
   Map<String, dynamic> toMap() {
     return {
       'vehicleID': vehicleId,

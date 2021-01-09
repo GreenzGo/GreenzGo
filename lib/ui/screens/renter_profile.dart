@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+//TODO:#5.1 Clean up code or remove entirely
 
 class RenterProfileScreen extends StatelessWidget {
   static const String id = 'renterProfile_screen';

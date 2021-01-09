@@ -5,8 +5,11 @@ import 'package:greenz_go_app_v2/utils/components/logo.dart';
 import 'package:greenz_go_app_v2/utils/theme/theme.dart';
 import 'package:intl/intl.dart';
 import 'package:smart_select/smart_select.dart';
-import 'package:greenz_go_app_v2/utils/widgets/reusableCard.dart';
 import 'package:greenz_go_app_v2/utils/widgets/custom_elevated_button.dart';
+
+//TODO:#2.1 Clean up code and optimize
+//TODO:#2.2 Add search functionality, should navigate to catalog page with filtered search results
+//TODO:#2.3 Make responsive to different screen sizes
 
 class SearchScreen extends StatefulWidget {
   static const String id = 'search_screen';

@@ -5,9 +5,14 @@ import 'package:greenz_go_app_v2/ui/screens/vehicle_form.dart';
 import 'package:provider/provider.dart';
 import 'package:greenz_go_app_v2/constants.dart';
 
+//TODO:#8.1 Clean up code and optimize
+//TODO:#8.2 Improve design
+//TODO:#8.3 Make responsive for different devices
+
 class VehicleDetail extends StatelessWidget {
   static const String id = 'vehicleProfile_screen';
 
+  //creates vehicle display widget; shows the vehicle image, drive type, seats, rating, location data
   Widget vehicleDisplay(String rating, driveType, seats, location, image) {
     return Container(
       padding: EdgeInsets.fromLTRB(20, 0, 20, 0),
@@ -222,6 +227,7 @@ class VehicleDetail extends StatelessWidget {
     );
   }
 
+  //creates vehicle detail widget; shows the vehicle status, description and status data
   Widget vehicleDetail(
       String vehicleOwner, vehicleType, vehicleDescript, vehicleStatus) {
     return Container(
@@ -344,6 +350,7 @@ class VehicleDetail extends StatelessWidget {
     );
   }
 
+  //creates vehicle price detail widget; shows the rental cost data
   Widget priceDetail(String price) {
     return Container(
       margin: EdgeInsets.fromLTRB(40, 20, 40, 0),
@@ -371,6 +378,7 @@ class VehicleDetail extends StatelessWidget {
     );
   }
 
+  //creates request button; allows user to request the current viewed vehicle
   Widget requestButton() {
     return SizedBox(
         width: 370,
@@ -403,12 +411,12 @@ class VehicleDetail extends StatelessWidget {
                 fontSize: 22,
                 color: kTextColor,
               ),
-            ),
+            ), //displays the name of the vehicle
             actions: [
               IconButton(
                 icon: Icon(Icons.favorite_border_rounded),
                 onPressed: () {},
-              ),
+              ), //allows user the favorite the current vehicle
               IconButton(
                 icon: Icon(Icons.edit),
                 onPressed: () {
@@ -419,7 +427,7 @@ class VehicleDetail extends StatelessWidget {
                     );
                   }));
                 },
-              ),
+              ), //allows user to edit the current vehicle data
             ],
           ),
           body: SingleChildScrollView(

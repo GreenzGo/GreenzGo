@@ -6,6 +6,11 @@ import 'package:greenz_go_app_v2/ui/screens/vehicle_form.dart';
 import 'package:greenz_go_app_v2/api/greenz_go_api.dart';
 import 'package:provider/provider.dart';
 
+//TODO:#4.1 Clean up code and optimize
+//TODO:#4.2 Change design
+//TODO:#4.3 Add functionality
+//TODO:#4.4 Add routes to different pages
+
 class ProfileScreen extends StatefulWidget {
   static const String id = 'profile_screen';
   @override

@@ -11,6 +11,7 @@ import 'package:greenz_go_app_v2/notifier/vehicle_notifier.dart';
 
 final _firestore = FirebaseFirestore.instance;
 
+//allows user to login into their account
 login(UserAccnt user, AuthNotifier authNotifier) async {
   UserCredential userCredential = await FirebaseAuth.instance
       .signInWithEmailAndPassword(email: user.email, password: user.password)
@@ -25,6 +26,7 @@ login(UserAccnt user, AuthNotifier authNotifier) async {
   }
 }
 
+//allows user to register an account
 register(UserAccnt user, AuthNotifier authNotifier) async {
   UserCredential userCredential = await FirebaseAuth.instance
       .createUserWithEmailAndPassword(
@@ -52,12 +54,14 @@ register(UserAccnt user, AuthNotifier authNotifier) async {
   }
 }
 
+//allows a user to logout of their account
 logout(AuthNotifier authNotifier) async {
   await FirebaseAuth.instance.signOut().catchError((e) => print(e.code));
 
   authNotifier.setUser(null);
 }
 
+//checks the current user signed in
 initializeCurrentUser(AuthNotifier authNotifier) async {
   User firebaseUser = await FirebaseAuth.instance.currentUser;
   if (firebaseUser != null) {
@@ -65,6 +69,7 @@ initializeCurrentUser(AuthNotifier authNotifier) async {
   }
 }
 
+//fetches data from 'Vehicles' collection in firebase database
 getVehicles(VehicleNotifier vehicleNotifier) async {
   QuerySnapshot snapshot =
       await FirebaseFirestore.instance.collection('Vehicles').get();
@@ -79,7 +84,9 @@ getVehicles(VehicleNotifier vehicleNotifier) async {
   vehicleNotifier.vehicleList = _vehicleList;
 }
 
+//Uploads vehicle form data to firebase database and its' image to firebase storage
 uploadVehicleWithImage(Vehicle vehicle, bool isUpdating, File localFile) async {
+  //checks if a local file was upload as image in vehicle form submission
   if (localFile != null) {
     print('uploading image');
     var fileExtension = path.extension(localFile.path);
@@ -104,6 +111,7 @@ uploadVehicleWithImage(Vehicle vehicle, bool isUpdating, File localFile) async {
   }
 }
 
+//uploads vehicle data from form
 _uploadVehicle(Vehicle vehicle, bool isUpdating, {String imageUrl}) async {
   CollectionReference vehicleRef =
       FirebaseFirestore.instance.collection('Vehicles');
@@ -112,7 +120,7 @@ _uploadVehicle(Vehicle vehicle, bool isUpdating, {String imageUrl}) async {
   if (imageUrl != null) {
     vehicle.image = imageUrl;
   }
-
+//updates or submits new vehicle data from form
   if (isUpdating) {
     vehicle.updatedAt = Timestamp.now();
     await vehicleRef.doc(vehicle.vehicleId).update(vehicle.toMap());

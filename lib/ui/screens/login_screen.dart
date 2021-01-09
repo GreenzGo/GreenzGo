@@ -33,6 +33,7 @@ class _LoginScreenState extends State<LoginScreen> {
   final GlobalKey<FormState> _loginFormKey = new GlobalKey<FormState>();
   final TextEditingController _passwordController = new TextEditingController();
 
+  //submits current data in form
   void _submitForm() {
     if (!_loginFormKey.currentState.validate()) {
       return;
@@ -48,6 +49,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
+  //calls the initState of LoginScreen
   void initState() {
     AuthNotifier authNotifier =
         Provider.of<AuthNotifier>(context, listen: false);
@@ -56,6 +58,7 @@ class _LoginScreenState extends State<LoginScreen> {
     super.initState();
   }
 
+  //creates display name text field
   Widget _buildDisplayNameTextField() {
     return TextFormField(
       decoration: InputDecoration(
@@ -97,6 +100,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  //creates email text field
   Widget _buildEmailNameTextField() {
     return TextFormField(
       decoration: InputDecoration(
@@ -140,6 +144,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  //creates password text field
   Widget _buildPasswordTextField() {
     return TextFormField(
       decoration: InputDecoration(
@@ -183,6 +188,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  //creates confirm password text field
   Widget _buildConfirmPasswordTextField() {
     return TextFormField(
       decoration: InputDecoration(
@@ -223,6 +229,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  //creates age slider field label
   Widget _buildAgeFieldName() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -240,6 +247,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  //creates age slider
   Widget _buildAgeSlider() {
     return Slider(
       onChanged: (newValue) {
@@ -256,6 +264,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  //creates account type radio button field
   Widget _buildAccountTypeRadioBtn() {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -311,6 +320,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  //creates phone number text field
   Widget _buildPhoneTextField() {
     return InternationalPhoneNumberInput(
       onInputChanged: (PhoneNumber number) {},
@@ -350,6 +360,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  //creates user address text field
   Widget _buildUserAddressTextField() {
     return TextFormField(
       decoration: InputDecoration(
@@ -390,6 +401,7 @@ class _LoginScreenState extends State<LoginScreen> {
     );
   }
 
+  //creates parish drop down field
   Widget _buildRentalParishTextField() {
     return Container(
       decoration: BoxDecoration(
@@ -466,7 +478,7 @@ class _LoginScreenState extends State<LoginScreen> {
               key: _loginFormKey,
               child: Column(
                 children: [
-                  Logo(),
+                  Logo(), //App logo
                   Stack(
                     overflow: Overflow.visible,
                     children: [
@@ -525,7 +537,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ],
                           ),
                         ),
-                      ),
+                      ), //Custom container the holds the text fields and dropdown buttons
                       Positioned(
                         bottom: -10,
                         left: 0,
@@ -543,7 +555,7 @@ class _LoginScreenState extends State<LoginScreen> {
                             ],
                           ),
                         ),
-                      ),
+                      ), //places login/register in the bottom center of the custom container
                     ],
                   ),
                   SizedBox(
@@ -574,13 +586,13 @@ class _LoginScreenState extends State<LoginScreen> {
                         ),
                       ),
                     ],
-                  ),
+                  ), //allows user to switch between login and register form
                   SizedBox(
                     height: 50,
                   ),
                 ],
               ),
-            ),
+            ), //Login and Register form
           ),
         ),
       ),

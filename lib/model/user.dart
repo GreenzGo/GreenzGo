@@ -1,3 +1,4 @@
+//creates UserAccnt class
 class UserAccnt {
   String displayName;
   String email;

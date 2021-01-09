@@ -17,9 +17,10 @@ import 'ui/screens/homescreen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'notifier/auth_notifier.dart';
 
-//TODO: #0009 Remove settings on tabmenu, put home in the center.
-//TODO: #5Create a dart file for all customer widgets, LOGO, Containers, Search/Login/Register buttons.
-//TODO: #8Create variables for all pages where necessary
+//TODO: #0.1 put home in the center.
+//TODO: #0.2 Create a dart file for all custom widgets, LOGO, Containers, Search/Login/Register buttons.
+//TODO: #0.3 Create variables for all pages where necessary
+//TODO: #0.4 Clean and optimize code
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

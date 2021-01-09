@@ -6,7 +6,9 @@ import 'package:greenz_go_app_v2/ui/screens/search_screen.dart';
 import 'package:greenz_go_app_v2/notifier/auth_notifier.dart';
 import 'package:provider/provider.dart';
 
-//TODO: #1Make Navigation bar work - update so that the navigation bar stays when you navigate to new screens
+//TODO: #1.1 Make Navigation bar work - update so that the navigation bar stays when you navigate to new screens
+
+//This file controls the bottom navigation bar
 
 class HomeScreen extends StatefulWidget {
   static const String id = 'home_screen';

@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:greenz_go_app_v2/constants.dart';
 
+//TODO:#6.1 Clean up code and optimize
+//TODO:#6.2 Use same design format as vehicle form
+//TODO:#6.3 Update api with code to allow user account data to be updated
+
 const double spacing = 10;
 double sliderValue = 20;
 

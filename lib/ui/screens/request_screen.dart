@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 
-//TODO: #7Change the subjects and information from a column of rows to a column of two containers that have 1 column each so that it could be aligned better.
+//TODO: #7.1 Change the subjects and information from a column of rows to a column of two containers that have 1 column each so that it could be aligned better.
+//TODO:#7.2 Clean up code and optimize
+//TODO:#7.3 Add functionality
 
 const double space = 2.8;
 

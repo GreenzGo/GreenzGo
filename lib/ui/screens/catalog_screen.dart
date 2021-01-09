@@ -8,7 +8,9 @@ import 'package:greenz_go_app_v2/ui/screens/vehicle_detail.dart';
 import 'package:greenz_go_app_v2/utils/widgets/vehicleListItem.dart';
 import 'package:provider/provider.dart';
 
-//TODO:#6 Refactor card to be able to generate a list view
+//TODO:#3.1 Clean up code and optimize
+//TODO:#3.2 Show vehicle results associated to the signed in renter
+//TODO:#3.3 Create filter options, possibly using chips or some other means
 
 class CatalogScreen extends StatefulWidget {
   static const String id = 'catalog_screen';
@@ -19,6 +21,7 @@ class CatalogScreen extends StatefulWidget {
 
 class _CatalogScreenState extends State<CatalogScreen>
     with AutomaticKeepAliveClientMixin {
+  //calls the initial state of CatalogScreen
   @override
   void initState() {
     VehicleNotifier vehicleNotifier =
@@ -59,31 +62,13 @@ class _CatalogScreenState extends State<CatalogScreen>
               ),
             ),
             actions: <Widget>[
-              Row(
-                children: <Widget>[
-                  IconButton(
-                    icon: Icon(
-                      Icons.filter_list,
-                      size: 30,
-                      color: Color(0xff57ba98),
-                    ),
-                    onPressed: () {},
-                  ),
-                  SizedBox(
-                    width: 10.0,
-                  ),
-                  IconButton(
-                    icon: Icon(
-                      Icons.filter_none,
-                      size: 25,
-                      color: Color(0xff57ba98),
-                    ),
-                    onPressed: () {},
-                  ),
-                  SizedBox(
-                    width: 5.0,
-                  ),
-                ],
+              IconButton(
+                icon: Icon(
+                  Icons.filter_list,
+                  size: 30,
+                  color: Color(0xff57ba98),
+                ),
+                onPressed: () {},
               ),
             ],
             elevation: 0,
@@ -146,7 +131,7 @@ class _CatalogScreenState extends State<CatalogScreen>
                     ),
                   ],
                 );
-              },
+              }, //builds a list view of vehicle widgets
               separatorBuilder: (BuildContext context, int index) {
                 return Divider(
                   height: 20,
@@ -155,7 +140,7 @@ class _CatalogScreenState extends State<CatalogScreen>
                   endIndent: 10,
                   color: Color(0xff57BA98),
                 );
-              },
+              }, //builds a separator between each vehicle widget
             ),
           ),
         ),

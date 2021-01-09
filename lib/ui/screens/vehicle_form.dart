@@ -10,6 +10,8 @@ import 'package:greenz_go_app_v2/notifier/vehicle_notifier.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
+//TODO:#9.1 Clean up code and optimize
+
 class VehicleForm extends StatefulWidget {
   final bool isUpdating;
   VehicleForm({@required this.isUpdating});
@@ -30,10 +32,13 @@ class _VehicleFormState extends State<VehicleForm> {
   final GlobalKey<FormState> _vehicleFormKey = new GlobalKey<FormState>();
   BorderRadius _textFieldRadius = BorderRadius.circular(30);
 
+  //calls th initState of VehicleForm
   @override
   void initState() {
     VehicleNotifier vehicleNotifier =
         Provider.of<VehicleNotifier>(context, listen: false);
+
+    //sets _currentVehicle to an already selected vehicle with its corresponding data or a new vehicle object
     if (vehicleNotifier.currentVehicle != null) {
       _currentVehicle = vehicleNotifier.currentVehicle;
     } else {
@@ -50,6 +55,7 @@ class _VehicleFormState extends State<VehicleForm> {
     super.initState();
   }
 
+  //submits the data in VehicleForm to their respective variables
   void _submitForm() {
     AuthNotifier authNotifier =
         Provider.of<AuthNotifier>(context, listen: false);
@@ -64,26 +70,16 @@ class _VehicleFormState extends State<VehicleForm> {
 
     uploadVehicleWithImage(_currentVehicle, widget.isUpdating, _imageFile);
 
-    print("Vehicle Make: ${_currentVehicle.vehicleMake}");
-    print("Vehicle Model: ${_currentVehicle.vehicleModel}");
-    print("Vehicle Type: ${_currentVehicle.vehicleType}");
-    print("Drive Type: ${_currentVehicle.driveType}");
-    print("Vehicle Seats: ${_currentVehicle.vehicleSeats}");
-    print("Vehicle Cost: ${_currentVehicle.vehicleRate}");
-    print("Vehicle Description: ${_currentVehicle.vehicleDesc}");
-    print("Renter Address: ${_currentVehicle.rentalAddress}");
-    print("Renter Parish: ${_currentVehicle.rentalParish}");
-    print("Vehicle Owner: ${_currentVehicle.vehicleOwner}");
-    print("Vehicle Status: ${_currentVehicle.vehicleStatus}");
-    print("_imageFile: ${_imageFile.toString()}");
-    print("_imageUrl: $_imageURL");
+    Navigator.pop(context);
     // if(null){}else{}
   }
 
+  //clears all data in the current Vehicle Form
   void _clearForm() {
     _vehicleFormKey.currentState.reset();
   }
 
+  //allows user to select a local image from their device gallery
   Future<File> _getLocalImage() async {
     final pickedFile = await _picker.getImage(
       source: ImageSource.gallery,
@@ -102,6 +98,7 @@ class _VehicleFormState extends State<VehicleForm> {
     return null;
   }
 
+  //creates vehicle make text field
   Widget _buildVehicleMakeTextField() {
     return TextFormField(
       decoration: InputDecoration(
@@ -142,6 +139,7 @@ class _VehicleFormState extends State<VehicleForm> {
     );
   }
 
+  //creates vehicle model text field
   Widget _buildVehicleModelTextField() {
     return TextFormField(
       decoration: InputDecoration(
@@ -182,6 +180,7 @@ class _VehicleFormState extends State<VehicleForm> {
     );
   }
 
+  //creates vehicle type drop down field
   Widget _buildVehicleTypeTextField() {
     return Container(
       decoration: BoxDecoration(
@@ -231,6 +230,7 @@ class _VehicleFormState extends State<VehicleForm> {
     );
   }
 
+  //creates drive type drop down field
   Widget _buildDriveTypeTextField() {
     return Container(
       decoration: BoxDecoration(
@@ -280,6 +280,7 @@ class _VehicleFormState extends State<VehicleForm> {
     );
   }
 
+  //creates vehicle status drop down field
   Widget _buildVehicleStatusTextField() {
     return Container(
       decoration: BoxDecoration(
@@ -329,6 +330,7 @@ class _VehicleFormState extends State<VehicleForm> {
     );
   }
 
+  //creates vehicle seat text field
   Widget _buildVehicleSeatTextField() {
     return TextFormField(
       decoration: InputDecoration(
@@ -370,6 +372,7 @@ class _VehicleFormState extends State<VehicleForm> {
     );
   }
 
+  //creates vehicle rate text field
   Widget _buildVehicleRateTextField() {
     return TextFormField(
       decoration: InputDecoration(
@@ -412,6 +415,7 @@ class _VehicleFormState extends State<VehicleForm> {
     );
   }
 
+  //creates vehicle description text field
   Widget _buildVehicleDescTextField() {
     return TextFormField(
       decoration: InputDecoration(
@@ -452,6 +456,7 @@ class _VehicleFormState extends State<VehicleForm> {
     );
   }
 
+  //creates renter address text field
   Widget _buildRentalAddressTextField() {
     return TextFormField(
       decoration: InputDecoration(
@@ -492,6 +497,7 @@ class _VehicleFormState extends State<VehicleForm> {
     );
   }
 
+  //creates parish drop down field
   Widget _buildRentalParishTextField() {
     return Container(
       decoration: BoxDecoration(
@@ -541,6 +547,7 @@ class _VehicleFormState extends State<VehicleForm> {
     );
   }
 
+  //displays vehicle image and allows it to be changed
   Widget _showVehicleImage() {
     if (_imageFile == null && _imageURL == null) {
       return Column(
@@ -736,6 +743,7 @@ class _VehicleFormState extends State<VehicleForm> {
             ),
           ),
         ),
+        //allows user to update current vehicle form data
         floatingActionButton: widget.isUpdating
             ? FloatingActionButton(
                 onPressed: () => _submitForm(),
