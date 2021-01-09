@@ -17,8 +17,8 @@ Greenz Go is an app that provides a service to both local rental businesses and 
 
 # Resources
 
---> Primarily Flutter SDK nad Dart language
---> Firebase Platform for storage and data management
---> Google Fonts
---> Material.io
---> Different flutter packages for extra functionality (packages info in pubspec.yaml file)
+1) Primarily Flutter SDK nad Dart language
+2) Firebase Platform for storage and data management
+3) Google Fonts
+4) Material.io
+5) Different flutter packages for extra functionality (packages info in pubspec.yaml file)
