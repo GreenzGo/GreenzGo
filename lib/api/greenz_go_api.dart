@@ -1,6 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:greenz_go_app_v2/model/user.dart';
+import 'package:path/path.dart' as path;
+import 'package:uuid/uuid.dart';
+import 'dart:io';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:greenz_go_app_v2/model/vehicle.dart';
 import 'package:greenz_go_app_v2/notifier/auth_notifier.dart';
 import 'package:greenz_go_app_v2/notifier/vehicle_notifier.dart';
@@ -73,4 +77,58 @@ getVehicles(VehicleNotifier vehicleNotifier) async {
   });
 
   vehicleNotifier.vehicleList = _vehicleList;
+}
+
+uploadVehicleWithImage(Vehicle vehicle, bool isUpdating, File localFile) async {
+  if (localFile != null) {
+    print('uploading image');
+    var fileExtension = path.extension(localFile.path);
+    print(fileExtension);
+
+    var uuid = Uuid().v4();
+
+    final Reference firebaseStorageRef =
+        FirebaseStorage.instance.ref().child('/images/$uuid$fileExtension');
+
+    await firebaseStorageRef.putFile(localFile).catchError((onError) {
+      print(onError);
+      return false;
+    });
+
+    String url = await firebaseStorageRef.getDownloadURL();
+    print('downloaded url: $url');
+    _uploadVehicle(vehicle, isUpdating, imageUrl: url);
+  } else {
+    print('skipping image upload');
+    _uploadVehicle(vehicle, isUpdating);
+  }
+}
+
+_uploadVehicle(Vehicle vehicle, bool isUpdating, {String imageUrl}) async {
+  CollectionReference vehicleRef =
+      FirebaseFirestore.instance.collection('Vehicles');
+  User firebaseUser = await FirebaseAuth.instance.currentUser;
+
+  if (imageUrl != null) {
+    vehicle.image = imageUrl;
+  }
+
+  if (isUpdating) {
+    vehicle.updatedAt = Timestamp.now();
+    await vehicleRef.doc(vehicle.vehicleId).update(vehicle.toMap());
+    print('updated vehicle with id: ${vehicle.vehicleId}');
+  } else {
+    vehicle.createdAt = Timestamp.now();
+    DocumentReference documentReference = await vehicleRef.add(vehicle.toMap());
+
+    vehicle.vehicleOwner = firebaseUser.displayName;
+
+    vehicle.vehicleId = documentReference.id;
+    vehicle.vehicleStatus = 'Available';
+    vehicle.rating = 0;
+
+    print('uploaded vehicle successfully: ${vehicle.toString()}');
+
+    await documentReference.set(vehicle.toMap(), SetOptions(merge: true));
+  }
 }

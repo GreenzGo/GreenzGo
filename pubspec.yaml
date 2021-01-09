@@ -22,12 +22,16 @@ dependencies:
   cloud_firestore: ^0.14.3+1
   firebase_core: ^0.5.2+1
   firebase_auth: ^0.18.3+1
+  firebase_storage: ^5.2.0
   google_fonts: ^1.1.1
   font_awesome_flutter: ^8.10.0
   package_info: ^0.4.3+2
   provider: ^4.3.2+2
   intl_phone_number_input: ^0.6.0
   cached_network_image: ^2.5.0
+  image_picker: ^0.6.7+21
+  path: ^1.7.0
+  uuid: ^2.2.2
 
 dev_dependencies:
   flutter_test:

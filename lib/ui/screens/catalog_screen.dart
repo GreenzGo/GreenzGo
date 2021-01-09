@@ -35,8 +35,7 @@ class _CatalogScreenState extends State<CatalogScreen>
 
   @override
   Widget build(BuildContext context) {
-    AuthNotifier authNotifier =
-        Provider.of<AuthNotifier>(context, listen: false);
+    AuthNotifier authNotifier = Provider.of<AuthNotifier>(context);
     VehicleNotifier vehicleNotifier = Provider.of<VehicleNotifier>(context);
 
     super.build(context);
@@ -112,20 +111,28 @@ class _CatalogScreenState extends State<CatalogScreen>
                       thumbnail: SizedBox.expand(
                         child: ClipRRect(
                           borderRadius: BorderRadius.circular(30),
-                          child: CachedNetworkImage(
-                            imageUrl: vehicleNotifier.vehicleList[index].image,
-                            imageBuilder: (context, imageProvider) => ClipRRect(
-                              borderRadius: BorderRadius.circular(30),
-                              child: Image(
-                                image: imageProvider,
-                                fit: BoxFit.fill,
-                              ),
-                            ),
-                            placeholder: (context, url) =>
-                                CircularProgressIndicator(),
-                            errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
-                          ),
+                          child: vehicleNotifier.vehicleList[index].image !=
+                                  null
+                              ? CachedNetworkImage(
+                                  imageUrl:
+                                      vehicleNotifier.vehicleList[index].image,
+                                  imageBuilder: (context, imageProvider) =>
+                                      ClipRRect(
+                                    borderRadius: BorderRadius.circular(30),
+                                    child: Image(
+                                      image: imageProvider,
+                                      fit: BoxFit.fill,
+                                    ),
+                                  ),
+                                  placeholder: (context, url) =>
+                                      CircularProgressIndicator(),
+                                  errorWidget: (context, url, error) =>
+                                      Icon(Icons.error),
+                                )
+                              : Icon(
+                                  Icons.image_not_supported_rounded,
+                                  size: 40,
+                                ),
                         ),
                       ),
                       title:

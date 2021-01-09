@@ -36,6 +36,12 @@ List<String> kdriveTypeDropDownItems = [
   'Automatic',
 ];
 
+List<String> kvehicleStatusDropDownItems = [
+  'Available',
+  'Pending',
+  'Unavailable',
+];
+
 List<String> kparishDropDownItems = [
   'Saint George',
   'Saint David',

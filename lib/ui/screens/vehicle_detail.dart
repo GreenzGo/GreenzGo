@@ -27,21 +27,24 @@ class VehicleDetail extends StatelessWidget {
             ),
             height: 290,
             child: SizedBox.expand(
-              child: CachedNetworkImage(
-                imageUrl: '$image',
-                imageBuilder: (context, imageProvider) => ClipRRect(
-                  borderRadius: BorderRadius.only(
-                    topLeft: Radius.circular(45),
-                    topRight: Radius.circular(45),
-                  ),
-                  child: Image(
-                    image: imageProvider,
-                    fit: BoxFit.fill,
-                  ),
-                ),
-                placeholder: (context, url) => CircularProgressIndicator(),
-                errorWidget: (context, url, error) => Icon(Icons.error),
-              ),
+              child: image != null
+                  ? CachedNetworkImage(
+                      imageUrl: '$image',
+                      imageBuilder: (context, imageProvider) => ClipRRect(
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(45),
+                          topRight: Radius.circular(45),
+                        ),
+                        child: Image(
+                          image: imageProvider,
+                          fit: BoxFit.fill,
+                        ),
+                      ),
+                      placeholder: (context, url) =>
+                          CircularProgressIndicator(),
+                      errorWidget: (context, url, error) => Icon(Icons.error),
+                    )
+                  : Icon(Icons.image_not_supported_rounded),
             ),
           ),
           Container(
@@ -324,6 +327,11 @@ class VehicleDetail extends StatelessWidget {
                       ),
                       Text(
                         "$vehicleStatus",
+                        style: TextStyle(
+                            color: vehicleStatus == 'Available' ||
+                                    vehicleStatus == 'Pending'
+                                ? Color(0xff57ba98)
+                                : Colors.red),
                       ),
                     ],
                   ),
@@ -375,8 +383,7 @@ class VehicleDetail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    VehicleNotifier vehicleNotifier =
-        Provider.of<VehicleNotifier>(context, listen: false);
+    VehicleNotifier vehicleNotifier = Provider.of<VehicleNotifier>(context);
     return SafeArea(
       child: Container(
         decoration: BoxDecoration(
@@ -407,7 +414,9 @@ class VehicleDetail extends StatelessWidget {
                 onPressed: () {
                   Navigator.of(context)
                       .push(MaterialPageRoute(builder: (BuildContext context) {
-                    return VehicleForm();
+                    return VehicleForm(
+                      isUpdating: true,
+                    );
                   }));
                 },
               ),
@@ -429,9 +438,7 @@ class VehicleDetail extends StatelessWidget {
                     '${vehicleNotifier.currentVehicle.vehicleOwner}',
                     '${vehicleNotifier.currentVehicle.vehicleType}',
                     '${vehicleNotifier.currentVehicle.vehicleDesc}',
-                    vehicleNotifier.currentVehicle.vehicleStatus == true
-                        ? 'Available'
-                        : 'Not Available',
+                    '${vehicleNotifier.currentVehicle.vehicleStatus}',
                   ),
                   priceDetail('${vehicleNotifier.currentVehicle.vehicleRate}'),
                   requestButton(),

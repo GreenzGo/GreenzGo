@@ -471,7 +471,7 @@ class _ProfileScreenState extends State<ProfileScreen>
                       vehicleNotifier.currentVehicle = null;
                       Navigator.of(context).push(
                           MaterialPageRoute(builder: (BuildContext context) {
-                        return VehicleForm();
+                        return VehicleForm(isUpdating: false);
                       }));
                     },
                     tooltip: 'Add a new Vehicle',

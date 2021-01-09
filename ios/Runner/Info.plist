@@ -10,6 +10,10 @@
 	<string>$(PRODUCT_BUNDLE_IDENTIFIER)</string>
 	<key>CFBundleInfoDictionaryVersion</key>
 	<string>6.0</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Allow the app to add and images for user and/or vehicle profile</string>
+	<key>NSCameraUsageDescription</key>
+    <string>Allow the app to capture an image for user and/or vehicle profile</string>
 	<key>CFBundleName</key>
 	<string>greenz_go_app_v2</string>
 	<key>CFBundlePackageType</key>

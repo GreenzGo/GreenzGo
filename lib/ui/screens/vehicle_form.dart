@@ -1,13 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:cached_network_image/cached_network_image.dart';
+import 'dart:io';
 import 'package:greenz_go_app_v2/constants.dart';
 import 'package:greenz_go_app_v2/model/vehicle.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:greenz_go_app_v2/api/greenz_go_api.dart';
 import 'package:greenz_go_app_v2/notifier/auth_notifier.dart';
 import 'package:greenz_go_app_v2/notifier/vehicle_notifier.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:provider/provider.dart';
 
 class VehicleForm extends StatefulWidget {
+  final bool isUpdating;
+  VehicleForm({@required this.isUpdating});
   @override
   _VehicleFormState createState() => _VehicleFormState();
 }
@@ -17,10 +22,11 @@ class _VehicleFormState extends State<VehicleForm> {
   String _vehicleTypeValue;
   String _rentalParishValue;
   Vehicle _currentVehicle;
+  String _imageURL;
+  File _imageFile;
   String _vehicleOwner;
-  bool _vehicleStatus = true;
-  int _rating = 0;
-  Timestamp _timeStamp;
+  String _vehicleStatus;
+  final ImagePicker _picker = ImagePicker();
   final GlobalKey<FormState> _vehicleFormKey = new GlobalKey<FormState>();
   BorderRadius _textFieldRadius = BorderRadius.circular(30);
 
@@ -37,26 +43,63 @@ class _VehicleFormState extends State<VehicleForm> {
     _rentalParishValue = _currentVehicle.rentalParish;
     _vehicleTypeValue = _currentVehicle.vehicleType;
     _vehicleDriveTypeValue = _currentVehicle.driveType;
+    _imageURL = _currentVehicle.image;
+    _vehicleOwner = _currentVehicle.vehicleOwner;
+    _vehicleStatus = _currentVehicle.vehicleStatus;
 
     super.initState();
   }
 
   void _submitForm() {
-    _currentVehicle.vehicleRate = _rating;
-    _currentVehicle.vehicleStatus = _vehicleStatus;
-    _currentVehicle.createdAt = _timeStamp;
-    _currentVehicle.vehicleOwner = _vehicleOwner;
+    AuthNotifier authNotifier =
+        Provider.of<AuthNotifier>(context, listen: false);
 
     if (!_vehicleFormKey.currentState.validate()) {
       return;
     }
     _vehicleFormKey.currentState.save();
 
+    _currentVehicle.vehicleStatus = _vehicleStatus;
+    _currentVehicle.vehicleOwner = _vehicleOwner;
+
+    uploadVehicleWithImage(_currentVehicle, widget.isUpdating, _imageFile);
+
+    print("Vehicle Make: ${_currentVehicle.vehicleMake}");
+    print("Vehicle Model: ${_currentVehicle.vehicleModel}");
+    print("Vehicle Type: ${_currentVehicle.vehicleType}");
+    print("Drive Type: ${_currentVehicle.driveType}");
+    print("Vehicle Seats: ${_currentVehicle.vehicleSeats}");
+    print("Vehicle Cost: ${_currentVehicle.vehicleRate}");
+    print("Vehicle Description: ${_currentVehicle.vehicleDesc}");
+    print("Renter Address: ${_currentVehicle.rentalAddress}");
+    print("Renter Parish: ${_currentVehicle.rentalParish}");
+    print("Vehicle Owner: ${_currentVehicle.vehicleOwner}");
+    print("Vehicle Status: ${_currentVehicle.vehicleStatus}");
+    print("_imageFile: ${_imageFile.toString()}");
+    print("_imageUrl: $_imageURL");
     // if(null){}else{}
   }
 
   void _clearForm() {
     _vehicleFormKey.currentState.reset();
+  }
+
+  Future<File> _getLocalImage() async {
+    final pickedFile = await _picker.getImage(
+      source: ImageSource.gallery,
+      imageQuality: 75,
+      maxWidth: MediaQuery.of(context).size.width,
+    );
+    print('PickedFile: ${pickedFile.toString()}');
+
+    setState(() {
+      _imageFile = File(pickedFile.path);
+    });
+
+    if (_imageFile != null) {
+      return _imageFile;
+    }
+    return null;
   }
 
   Widget _buildVehicleMakeTextField() {
@@ -181,12 +224,6 @@ class _VehicleFormState extends State<VehicleForm> {
           'Select a vehicle type',
           style: TextStyle(fontSize: 12),
         ),
-        validator: (value) {
-          if (value.isEmpty) {
-            return 'Vehicle Type is required';
-          }
-          return null;
-        },
         onSaved: (value) {
           _currentVehicle.vehicleType = value;
         },
@@ -236,14 +273,57 @@ class _VehicleFormState extends State<VehicleForm> {
           'Select a drive type',
           style: TextStyle(fontSize: 12),
         ),
-        validator: (value) {
-          if (value.isEmpty) {
-            return 'Drive Type is required';
-          }
-          return null;
-        },
         onSaved: (value) {
           _currentVehicle.driveType = value;
+        },
+      ),
+    );
+  }
+
+  Widget _buildVehicleStatusTextField() {
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(30),
+        border: Border.all(),
+        color: Color(0xff121212),
+      ),
+      child: DropdownButtonFormField(
+        items: kvehicleStatusDropDownItems
+            .map<DropdownMenuItem<String>>((String value) {
+          return DropdownMenuItem<String>(
+            value: value,
+            child: Text(
+              value,
+              style: TextStyle(fontSize: 16),
+            ),
+          );
+        }).toList(),
+        decoration: InputDecoration(
+          focusedBorder: OutlineInputBorder(
+            borderSide: BorderSide(
+              color: Color(0xff57BA98),
+            ),
+            borderRadius: _textFieldRadius,
+          ),
+          border: OutlineInputBorder(
+            borderRadius: _textFieldRadius,
+            borderSide: BorderSide(color: Colors.white),
+          ),
+          filled: true,
+          fillColor: Color(0xff121212),
+        ),
+        onChanged: (value) {
+          setState(() {
+            _vehicleStatus = value;
+          });
+        },
+        value: _vehicleStatus,
+        hint: Text(
+          'Select vehicle status',
+          style: TextStyle(fontSize: 12),
+        ),
+        onSaved: (value) {
+          _currentVehicle.vehicleStatus = value;
         },
       ),
     );
@@ -399,7 +479,7 @@ class _VehicleFormState extends State<VehicleForm> {
       cursorColor: Color(0xff57BA98),
       validator: (value) {
         if (value.isEmpty) {
-          return 'Rental Address is required';
+          return 'Address is required';
         }
         if (value.length < 4) {
           return 'Vehicle Seats must be 4 characters or more';
@@ -454,12 +534,6 @@ class _VehicleFormState extends State<VehicleForm> {
           'Select a parish',
           style: TextStyle(fontSize: 12),
         ),
-        validator: (value) {
-          if (value.isEmpty) {
-            return 'Rental Address is required';
-          }
-          return null;
-        },
         onSaved: (value) {
           _currentVehicle.rentalParish = value;
         },
@@ -468,16 +542,77 @@ class _VehicleFormState extends State<VehicleForm> {
   }
 
   Widget _showVehicleImage() {
-    return Text('Vehicle Image');
+    if (_imageFile == null && _imageURL == null) {
+      return Column(
+        children: [
+          Icon(
+            Icons.image_not_supported_rounded,
+            size: 55,
+          ),
+          Text('No image'),
+        ],
+      );
+    } else if (_imageFile != null) {
+      print('showing image from local file');
+      return Stack(
+        alignment: AlignmentDirectional.bottomCenter,
+        children: [
+          Image.file(
+            _imageFile,
+            fit: BoxFit.cover,
+            height: 230,
+          ),
+          FlatButton(
+            onPressed: () => _getLocalImage(),
+            color: Colors.black26,
+            child: Text(
+              'Change Image',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
+            ),
+          ),
+        ],
+      );
+    } else if (_imageURL != null) {
+      print('showing network image');
+      return Stack(
+        alignment: AlignmentDirectional.bottomCenter,
+        children: [
+          CachedNetworkImage(
+            imageUrl: _imageURL,
+            imageBuilder: (context, imageProvider) => ClipRRect(
+              borderRadius: BorderRadius.circular(20),
+              child: Image(
+                image: imageProvider,
+                fit: BoxFit.cover,
+                height: 230,
+              ),
+            ),
+            placeholder: (context, url) => CircularProgressIndicator(),
+            errorWidget: (context, url, error) => Icon(Icons.error),
+          ),
+          FlatButton(
+            onPressed: () => _getLocalImage(),
+            color: Colors.black26,
+            child: Text(
+              'Change Image',
+              style: TextStyle(
+                color: Colors.white,
+                fontWeight: FontWeight.bold,
+                fontSize: 20,
+              ),
+            ),
+          ),
+        ],
+      );
+    }
   }
 
   @override
   Widget build(BuildContext context) {
-    AuthNotifier authNotifier =
-        Provider.of<AuthNotifier>(context, listen: false);
-
-    _vehicleOwner = authNotifier.user.displayName;
-
     return Container(
       decoration: BoxDecoration(
         image: DecorationImage(
@@ -499,7 +634,7 @@ class _VehicleFormState extends State<VehicleForm> {
             padding: EdgeInsets.all(25),
             child: Form(
               key: _vehicleFormKey,
-              autovalidateMode: AutovalidateMode.always,
+              autovalidateMode: AutovalidateMode.onUserInteraction,
               child: Column(
                 children: [
                   _showVehicleImage(),
@@ -507,7 +642,7 @@ class _VehicleFormState extends State<VehicleForm> {
                     height: 15,
                   ),
                   Text(
-                    'Add Vehicle',
+                    widget.isUpdating ? 'Edit Vehicle' : 'Add Vehicle',
                     style: TextStyle(
                       fontSize: 30,
                     ),
@@ -516,12 +651,14 @@ class _VehicleFormState extends State<VehicleForm> {
                   SizedBox(
                     height: 15,
                   ),
-                  ElevatedButton(
-                    onPressed: () {},
-                    child: Text(
-                      'Add Image'.toUpperCase(),
-                    ),
-                  ),
+                  _imageFile == null && _imageURL == null
+                      ? ElevatedButton(
+                          onPressed: () => _getLocalImage(),
+                          child: Text(
+                            'Add Image'.toUpperCase(),
+                          ),
+                        )
+                      : SizedBox(height: 5),
                   SizedBox(
                     height: 15,
                   ),
@@ -561,38 +698,51 @@ class _VehicleFormState extends State<VehicleForm> {
                   SizedBox(
                     height: 15,
                   ),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      ElevatedButton(
-                        onPressed: () {},
-                        child: Text(
-                          'Submit'.toUpperCase(),
-                          style: TextStyle(fontWeight: FontWeight.bold),
+                  widget.isUpdating
+                      ? _buildVehicleStatusTextField()
+                      : SizedBox(height: 0),
+                  widget.isUpdating
+                      ? SizedBox(height: 25)
+                      : Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () => _submitForm(),
+                              child: Text(
+                                'Submit'.toUpperCase(),
+                                style: TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                            ),
+                            SizedBox(
+                              height: 15,
+                            ),
+                            ElevatedButton(
+                              style: ButtonStyle(
+                                backgroundColor:
+                                    MaterialStateProperty.all<Color>(
+                                        Colors.black54),
+                              ),
+                              onPressed: () {
+                                _clearForm();
+                              },
+                              child: Text(
+                                'Clear'.toUpperCase(),
+                              ),
+                            ),
+                          ],
                         ),
-                      ),
-                      SizedBox(
-                        height: 15,
-                      ),
-                      ElevatedButton(
-                        style: ButtonStyle(
-                          backgroundColor:
-                              MaterialStateProperty.all<Color>(Colors.black54),
-                        ),
-                        onPressed: () {
-                          _clearForm();
-                        },
-                        child: Text(
-                          'Clear'.toUpperCase(),
-                        ),
-                      ),
-                    ],
-                  ),
                 ],
               ),
             ),
           ),
         ),
+        floatingActionButton: widget.isUpdating
+            ? FloatingActionButton(
+                onPressed: () => _submitForm(),
+                child: Icon(Icons.save_rounded),
+                foregroundColor: Colors.white,
+              )
+            : null,
       ),
     );
   }

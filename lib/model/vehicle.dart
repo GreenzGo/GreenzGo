@@ -13,10 +13,11 @@ class Vehicle {
   int rating;
   int vehicleSeats;
   String vehicleOwner;
-  bool vehicleStatus;
+  String vehicleStatus;
   String image;
 
   Timestamp createdAt;
+  Timestamp updatedAt;
 
   Vehicle();
 
@@ -35,5 +36,28 @@ class Vehicle {
     vehicleOwner = data['vehicleOwner'];
     vehicleStatus = data['vehicleStatus'];
     image = data['image'];
+    createdAt = data['createdAt'];
+    updatedAt = data['updatedAt'];
+  }
+
+  Map<String, dynamic> toMap() {
+    return {
+      'vehicleID': vehicleId,
+      'vehicleMake': vehicleMake,
+      'vehicleModel': vehicleModel,
+      'vehicleType': vehicleType,
+      'address': rentalAddress,
+      'parish': rentalParish,
+      'vehicleRate': vehicleRate,
+      'vehicleDescription': vehicleDesc,
+      'driveType': driveType,
+      'rating': rating,
+      'vehicleSeats': vehicleSeats,
+      'vehicleOwner': vehicleOwner,
+      'vehicleStatus': vehicleStatus,
+      'image': image,
+      'createdAt': createdAt,
+      'updatedAt': updatedAt,
+    };
   }
 }
